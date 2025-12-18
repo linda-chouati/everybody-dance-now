@@ -79,32 +79,32 @@ def add_audio_to_video(silent_video_path, src_video_path):
     """
     pour ajouter le son à une video lors de la démo 
     """
-    if not MOVIEPY_OK:
-        return silent_video_path
+    # if not MOVIEPY_OK:
+    #     return silent_video_path
 
-    video_clip = VideoFileClip(silent_video_path)
-    src_clip = VideoFileClip(src_video_path)
+    # video_clip = VideoFileClip(silent_video_path)
+    # src_clip = VideoFileClip(src_video_path)
 
-    final_clip = video_clip.set_audio(src_clip.audio)
+    # final_clip = video_clip.set_audio(src_clip.audio)
 
-    tmp_file = tempfile.NamedTemporaryFile(suffix=".mp4", delete=False)
-    out_with_audio = tmp_file.name
-    tmp_file.close()
+    # tmp_file = tempfile.NamedTemporaryFile(suffix=".mp4", delete=False)
+    # out_with_audio = tmp_file.name
+    # tmp_file.close()
 
-    final_clip.write_videofile(
-        out_with_audio,
-        codec="libx264",
-        audio_codec="aac",
-        verbose=False,
-        logger=None,
-    )
+    # final_clip.write_videofile(
+    #     out_with_audio,
+    #     codec="libx264",
+    #     audio_codec="aac",
+    #     verbose=False,
+    #     logger=None,
+    # )
 
-    video_clip.close()
-    src_clip.close()
-    final_clip.close()
+    # video_clip.close()
+    # src_clip.close()
+    # final_clip.close()
 
-    #return out_with_audio
-    return None
+    # #return out_with_audio
+    return silent_video_path
 
 def make_dance_demo_video(src_video_path, gen_type):
     """
