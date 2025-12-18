@@ -7,3 +7,5 @@ streamlit
 moviepy
 tqdm
 mediapipe==0.10.9
+imageio
+imageio-ffmpeg
