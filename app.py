@@ -103,7 +103,8 @@ def add_audio_to_video(silent_video_path, src_video_path):
     src_clip.close()
     final_clip.close()
 
-    return out_with_audio
+    #return out_with_audio
+    return None
 
 def make_dance_demo_video(src_video_path, gen_type):
     """
