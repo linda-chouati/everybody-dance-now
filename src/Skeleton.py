@@ -11,9 +11,12 @@ from Vec3 import *
 #mp_pose = mp.solutions.pose
 #mp_pose_detector = mp.solutions.pose.Pose()     # en global pour éviter de le recréer à chaque fois dans la classe, sinon mettre en static
 
+# en local on laisse 2 et sur streamlit en 1 
+MODEL_COMPLEXITY = int(os.getenv("POSE_MODEL_COMPLEXITY", "2"))
+
 mp_pose_detector = mp.solutions.pose.Pose(
             static_image_mode=False,            # False is for video sequence
-            model_complexity=2,
+            model_complexity=MODEL_COMPLEXITY,
             smooth_landmarks=True,
             enable_segmentation=False,
             smooth_segmentation=False,
