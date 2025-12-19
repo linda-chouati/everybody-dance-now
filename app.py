@@ -4,12 +4,6 @@ import cv2
 import numpy as np
 import streamlit as st
 import tempfile
-try:
-    from moviepy.editor import VideoFileClip
-    MOVIEPY_OK = True
-except Exception:
-    MOVIEPY_OK = False
-
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(ROOT_DIR, "src")
@@ -171,8 +165,13 @@ def make_dance_demo_video(src_video_path, gen_type):
         image_combined = np.hstack((img_view_1, img_view_2, img_view_3))
 
         if video_writer is None:
-            fourcc = cv2.VideoWriter_fourcc(*"avc1")
-            fps = max(1.0, float(source.getVideoFps()) / 5.0)
+            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+
+            fps = float(source.getVideoFps())
+            if fps_src <= 0 or np.isnan(fps_src):
+                fps = 25.0
+            else:
+                fps = max(1.0, fps_src / 5.0)
 
             tmp_file = tempfile.NamedTemporaryFile(suffix=".mp4", delete=False)
             out_path = tmp_file.name
@@ -184,6 +183,10 @@ def make_dance_demo_video(src_video_path, gen_type):
                 fps,
                 (image_combined.shape[1], image_combined.shape[0]),
             )
+                
+            if not video_writer.isOpened():
+                st.error("Impossible de créer la vidéo de sortie (VideoWriter non ouvert).")
+                return None
 
         video_writer.write(image_combined)
 

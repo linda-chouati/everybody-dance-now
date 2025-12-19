@@ -43,43 +43,58 @@ class DanceDemo:
         else:
             print("DanceDemo: typeOfGen error!!!")
 
-
     def draw(self):
         ske = Skeleton()
         image_err = np.zeros((256, 256, 3), dtype=np.uint8)
-        image_err[:, :] = (0, 0, 255)  # (B, G, R)
+        image_err[:, :] = (0, 0, 255)
+
         for i in range(self.source.getTotalFrames()):
             image_src = self.source.readFrame()
-            if i%5 == 0:
+
+            if i % 5 == 0:
                 isSke, image_src, ske = self.target.cropAndSke(image_src, ske)
+
                 if isSke:
-                    ske.draw(image_src)
-                    image_tgt = self.generator.generate(ske)            # GENERATOR !!!
-                    image_tgt = image_tgt*255
-                    image_tgt = cv2.resize(image_tgt, (128, 128))
+                    ske_img = self.ske_to_img(ske)
+                    image_tgt = self.generator.generate(ske)
+                    image_tgt = (image_tgt * 255).astype(np.uint8)
                 else:
-                    image_tgt = image_err
-                image_combined = combineTwoImages(image_src, image_tgt)
-                image_combined = cv2.resize(image_combined, (512, 256))
+                    ske_img  = image_err.copy()
+                    image_tgt = image_err.copy()
+
+                H, W = 256, 256
+                image_src = cv2.resize(image_src, (W, H))
+                ske_img   = cv2.resize(ske_img,   (W, H))
+                image_tgt = cv2.resize(image_tgt, (W, H))
+
+                image_combined_un = combineTwoImages(image_src, ske_img)
+                image_combined_deux = combineTwoImages(image_combined_un, image_tgt)
+
+                image_combined = cv2.resize(image_combined_deux, (512, 256))
                 cv2.imshow('Image', image_combined)
+
                 key = cv2.waitKey(1)
                 if key & 0xFF == ord('q'):
                     break
                 if key & 0xFF == ord('n'):
-                    self.source.readNFrames( 100 )
+                    self.source.readNFrames(100)
+
         cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
     # NEAREST = 1
+
     # VANILLA_NN_SKE = 2
     # VANILLA_NN_Image = 3
+
     # GAN_SKE = 4
     # GAN_Image = 5
+
     # GAN_W_KSE = 6
     # GAN_W_IMAGE = 7
 
-    GEN_TYPE = 7
+    GEN_TYPE = 4
     OPT = 2
 
     if OPT == 1 : 
